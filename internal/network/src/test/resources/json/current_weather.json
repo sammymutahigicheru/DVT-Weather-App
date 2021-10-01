@@ -1,0 +1,43 @@
+{
+  "coord": {
+    "lon": 36.9003,
+    "lat": -1.2086
+  },
+  "weather": [
+    {
+      "id": 803,
+      "main": "Clouds",
+      "description": "broken clouds",
+      "icon": "04n"
+    }
+  ],
+  "base": "stations",
+  "main": {
+    "temp": 19.4,
+    "feels_like": 19.04,
+    "temp_min": 17.98,
+    "temp_max": 19.4,
+    "pressure": 1022,
+    "humidity": 63
+  },
+  "visibility": 10000,
+  "wind": {
+    "speed": 4.63,
+    "deg": 70
+  },
+  "clouds": {
+    "all": 75
+  },
+  "dt": 1633121724,
+  "sys": {
+    "type": 1,
+    "id": 2543,
+    "country": "KE",
+    "sunrise": 1633058303,
+    "sunset": 1633101935
+  },
+  "timezone": 10800,
+  "id": 192710,
+  "name": "Kiambu",
+  "cod": 200
+}
