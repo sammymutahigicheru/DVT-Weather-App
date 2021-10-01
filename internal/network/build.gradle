@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -32,10 +33,13 @@ android {
 }
 
 dependencies {
-
-    //NETWORK
-    api("com.squareup.retrofit2:retrofit:2.9.0")
+    api("com.squareup.moshi:moshi-kotlin:1.12.0")
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.12.0")
     api("com.squareup.retrofit2:converter-moshi:2.8.1")
+
+    //network
+    api("com.squareup.retrofit2:retrofit:2.9.0")
+    api("com.squareup.okhttp3:okhttp:5.0.0-alpha.2")
     api("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
 
     testImplementation 'junit:junit:4.13.2'
