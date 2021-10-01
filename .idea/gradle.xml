@@ -10,6 +10,10 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/internal" />
+            <option value="$PROJECT_DIR$/internal/core" />
+            <option value="$PROJECT_DIR$/internal/data" />
+            <option value="$PROJECT_DIR$/internal/network" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
