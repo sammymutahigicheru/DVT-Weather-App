@@ -11,8 +11,10 @@
  * the License.
  *
  **/
-package com.dvt.network.commons
+package com.dvt.network.dispatcher
 
+import com.dvt.network.commons.Constants
+import com.dvt.network.commons.getJson
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.RecordedRequest
