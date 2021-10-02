@@ -2,7 +2,6 @@ package com.dvt.network.network
 
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
@@ -11,21 +10,21 @@ import java.net.SocketTimeoutException
 suspend fun <T> apiCall(
     dispatcher: CoroutineDispatcher,
     apiCall: suspend () -> T
-): DTVResult<T> = withContext(dispatcher) {
+): DVTResult<T> = withContext(dispatcher) {
     try {
-        DTVResult.Success(apiCall.invoke())
+        DVTResult.Success(apiCall.invoke())
     } catch (throwable: Throwable) {
         when (throwable) {
-            is SocketTimeoutException -> DTVResult.ServerError(1,ErrorResponse("Socket Time Out","Failure"))
-            is IOException -> DTVResult.DTVError
+            is SocketTimeoutException -> DVTResult.ServerError(1,ErrorResponse("Socket Time Out","Failure"))
+            is IOException -> DVTResult.DVTError
             is HttpException -> {
                 val code = throwable.code()
 
                 val errorResponse = convertErrorBody(throwable)
-                DTVResult.ServerError(code, errorResponse)
+                DVTResult.ServerError(code, errorResponse)
             }
             else -> {
-                DTVResult.ServerError(null, null)
+                DVTResult.ServerError(null, null)
             }
         }
     }

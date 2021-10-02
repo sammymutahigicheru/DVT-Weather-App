@@ -1,4 +1,4 @@
-package com.dvt.network.commons
+package com.dvt.dvtweatherapp.commons
 
 import com.google.common.io.Resources
 import java.io.File

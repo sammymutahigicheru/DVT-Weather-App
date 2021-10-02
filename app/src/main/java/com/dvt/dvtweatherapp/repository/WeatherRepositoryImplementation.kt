@@ -3,7 +3,7 @@ package com.dvt.network.repository
 import com.dvt.network.api.WeatherAPI
 import com.dvt.network.models.CurrentWeatherResponse
 import com.dvt.network.models.OneShotForeCastResponse
-import com.dvt.network.network.DTVResult
+import com.dvt.network.network.DVTResult
 import com.dvt.network.network.apiCall
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +17,7 @@ class WeatherRepositoryImplementation(
         latitude: String,
         longitude: String,
         apiKey: String
-    ): DTVResult<CurrentWeatherResponse> = apiCall(ioDispatcher) {
+    ): DVTResult<CurrentWeatherResponse> = apiCall(ioDispatcher) {
         weatherApi.getCurrentWeather(latitude, longitude, apiKey)
     }
 
@@ -25,7 +25,7 @@ class WeatherRepositoryImplementation(
         latitude: String,
         longitude: String,
         apiKey: String
-    ): DTVResult<OneShotForeCastResponse> = apiCall(ioDispatcher) {
+    ): DVTResult<OneShotForeCastResponse> = apiCall(ioDispatcher) {
         weatherApi.getForecast(latitude, latitude, apiKey)
     }
 

@@ -11,10 +11,9 @@
  * the License.
  *
  **/
-package com.dvt.network.dispatcher
+package com.dvt.dvtweatherapp.dispatcher
 
-import com.dvt.network.commons.Constants
-import com.dvt.network.commons.getJson
+import com.dvt.dvtweatherapp.commons.Constants
 import com.google.common.io.Resources
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
