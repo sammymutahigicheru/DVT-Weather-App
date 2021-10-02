@@ -3,8 +3,9 @@ package com.dvt.network.repository
 import com.dvt.network.api.WeatherAPI
 import com.dvt.network.dispatcher.WeatherRequestDispatcher
 import com.dvt.network.models.CurrentWeatherResponse
+import com.dvt.network.network.DTVResult
 import com.google.common.truth.Truth
-import com.squareup.moshi.Moshi
+import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.mockwebserver.MockWebServer
@@ -24,7 +25,7 @@ class WeatherRepositoryImplTest: Spek({
 
     lateinit var weatherRepository: WeatherRepository
 
-    lateinit var result: DTVResult<HashMap<String, CurrentWeatherResponse>>
+    lateinit var result: DTVResult<CurrentWeatherResponse>
 
     fun buildOkhttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
@@ -46,28 +47,28 @@ class WeatherRepositoryImplTest: Spek({
             }
             okHttpClient = buildOkhttpClient(loggingInterceptor)
 
-            val moshi = Moshi.Builder().build()
-
             weatherAPI = Retrofit.Builder()
                 .baseUrl(mockWebServer.url("/"))
                 .client(okHttpClient)
-                .addConverterFactory(MoshiConverterFactory.create(moshi))
+                .addConverterFactory(MoshiConverterFactory.create())
                 .build()
                 .create(WeatherAPI::class.java)
 
             weatherRepository =
-                WeatherRepositoryImpl(weatherAPI = weatherAPI, weatherDao = mockk())
+                WeatherRepositoryImplementation(weatherApi = weatherAPI)
         }
 
         afterEachScenario {
             mockWebServer.shutdown()
         }
 
+        //success scenario
+
         Scenario("Fetching the current weather and weather forecast") {
 
             Given("Make the actual API call to get the result") {
                 runBlocking {
-                    result = weatherRepository.fetchCurrentWeather()
+                    result = weatherRepository.getCurrentWeather("-1.208571","36.900341","c1373764270eceaee171213e6b2560c7")
                 }
             }
 
@@ -75,21 +76,22 @@ class WeatherRepositoryImplTest: Spek({
                 Truth.assertThat(result).isInstanceOf(DTVResult.Success::class.java)
             }
 
-            Then("We check the value of today's weather to check if we get the correct lowTemp value") {
-                Truth.assertThat((result as DTVResult.Success).data["today"]?.lowTemp)
-                    .isEqualTo(23.36)
+            Then("We check the value of current weather to check if we get the name of the current location") {
+                Truth.assertThat((result as DTVResult.Success).data.name)
+                    .isEqualTo("Kiambu")
             }
 
-            Then("We check the value of tomorrow's weather to check if we get the correct highTemp value") {
-                Truth.assertThat((result as DTVResult.Success).data["tomorrow"]?.highTemp)
-                    .isEqualTo(24.9)
+            Then("We check the value of current weather to check if we get the correct highTemp value") {
+                Truth.assertThat((result as DTVResult.Success).data.main.tempMax)
+                    .isEqualTo(19.4)
             }
 
-            Then("We check the value of day after tomorrow weather to check if we get the correct description value") {
-                Truth.assertThat((result as DTVResult.Success).data["dayAfterTomorrow"]?.description)
+            Then("We check the value of current weather to check if we get the correct description value") {
+                Truth.assertThat((result as DTVResult.Success).data.weather[2].description)
                     .isEqualTo("broken clouds")
             }
         }
     }
+
 
 })
