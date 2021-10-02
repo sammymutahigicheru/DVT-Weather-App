@@ -2,15 +2,16 @@ package com.dvt.network.network
 
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
 import java.net.SocketTimeoutException
 
 suspend fun <T> apiCall(
-    dispatcher: CoroutineDispatcher,
+    ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     apiCall: suspend () -> T
-): DVTResult<T> = withContext(dispatcher) {
+): DVTResult<T> = withContext(ioDispatcher) {
     try {
         DVTResult.Success(apiCall.invoke())
     } catch (throwable: Throwable) {

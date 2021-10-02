@@ -5,19 +5,16 @@ import com.dvt.network.models.CurrentWeatherResponse
 import com.dvt.network.models.OneShotForeCastResponse
 import com.dvt.network.network.DVTResult
 import com.dvt.network.network.apiCall
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 
 class WeatherRepositoryImplementation(
     private val weatherApi: WeatherAPI,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : WeatherRepository {
 
     override suspend fun getCurrentWeather(
         latitude: String,
         longitude: String,
         apiKey: String
-    ): DVTResult<CurrentWeatherResponse> = apiCall(ioDispatcher) {
+    ): DVTResult<CurrentWeatherResponse> = apiCall {
         weatherApi.getCurrentWeather(latitude, longitude, apiKey)
     }
 
@@ -25,7 +22,7 @@ class WeatherRepositoryImplementation(
         latitude: String,
         longitude: String,
         apiKey: String
-    ): DVTResult<OneShotForeCastResponse> = apiCall(ioDispatcher) {
+    ): DVTResult<OneShotForeCastResponse> = apiCall {
         weatherApi.getForecast(latitude, latitude, apiKey)
     }
 
