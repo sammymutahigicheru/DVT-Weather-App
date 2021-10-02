@@ -13,6 +13,7 @@ import org.koin.core.module.Module
 class DVTWeatherApp:Application() {
     override fun onCreate() {
         super.onCreate()
+
         initilizeKoin()
     }
 

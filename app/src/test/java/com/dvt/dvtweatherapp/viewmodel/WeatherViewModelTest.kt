@@ -1,5 +1,9 @@
 package com.dvt.dvtweatherapp.viewmodel
 
+import app.cash.turbine.test
+import com.dvt.dvtweatherapp.commons.Constants
+import com.dvt.dvtweatherapp.helpers.testCurrentWeatherResponseResult
+import com.dvt.dvtweatherapp.helpers.testWeatherResponse
 import com.dvt.network.network.DVTResult
 import com.dvt.network.repository.WeatherRepository
 import io.mockk.coEvery
@@ -13,14 +17,17 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.jupiter.api.Assertions
 import org.spekframework.spek2.Spek
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 @ExperimentalCoroutinesApi
 internal class WeatherViewModelTest : Spek({
 
-    val weatherRepository = mockk<WeatherRepository>()
     lateinit var weatherViewModel: WeatherViewModel
 
     val dispatcher = TestCoroutineDispatcher()
+
+    val weatherRepository = mockk<WeatherRepository>()
 
     beforeGroup {
         Dispatchers.setMain(dispatcher = dispatcher)
@@ -36,27 +43,27 @@ internal class WeatherViewModelTest : Spek({
         test("Assert that an event was received and return it") {
 
             runBlocking {
-                coEvery { weatherRepository.getCurrentWeather("","","") } returns DVTResult.Success(
+                coEvery { weatherRepository.getCurrentWeather(Constants.LATITUDE,Constants.LONGITUDE,Constants.API_KEY) } returns DVTResult.Success(
                     data = testWeatherResponse
                 )
-                weatherViewModel.getCurrentWeather()
-                coVerify { weatherRepository.getCurrentWeather("","","") }
+                weatherViewModel.getCurrentWeather(Constants.LATITUDE,Constants.LONGITUDE,Constants.API_KEY)
+                coVerify { weatherRepository.getCurrentWeather(Constants.LATITUDE,Constants.LONGITUDE,Constants.API_KEY) }
                 weatherViewModel.weatherState.test {
                     awaitEvent()
                 }
             }
         }
 
-        test("Test that weather information is fetched successfully") {
+        test("Test that current weather information is fetched successfully") {
 
             runBlocking {
-                coEvery { weatherRepository.getCurrentWeather("","","") } returns DVTResult.Success(
+                coEvery { weatherRepository.getCurrentWeather(Constants.LATITUDE,Constants.LONGITUDE,Constants.API_KEY) } returns DVTResult.Success(
                     data = testWeatherResponse
                 )
-                weatherViewModel.getCurrentWeather()
-                coVerify { weatherRepository.getCurrentWeather("","","") }
+                weatherViewModel.getCurrentWeather(Constants.LATITUDE,Constants.LONGITUDE,Constants.API_KEY)
+                coVerify { weatherRepository.getCurrentWeather(Constants.LATITUDE,Constants.LONGITUDE,Constants.API_KEY) }
                 weatherViewModel.weatherState.test {
-                    Assertions.assertEquals(awaitItem(), testWeatherResponseResult)
+                    Assertions.assertEquals(awaitItem(), testCurrentWeatherResponseResult)
                 }
             }
         }
