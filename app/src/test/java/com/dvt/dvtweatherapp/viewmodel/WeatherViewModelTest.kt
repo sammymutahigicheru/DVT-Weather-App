@@ -48,7 +48,7 @@ internal class WeatherViewModelTest : Spek({
                 )
                 weatherViewModel.getCurrentWeather(Constants.LATITUDE,Constants.LONGITUDE,Constants.API_KEY)
                 coVerify { weatherRepository.getCurrentWeather(Constants.LATITUDE,Constants.LONGITUDE,Constants.API_KEY) }
-                weatherViewModel.weatherState.test {
+                weatherViewModel.currentWeatherState.test {
                     awaitEvent()
                 }
             }
@@ -62,7 +62,7 @@ internal class WeatherViewModelTest : Spek({
                 )
                 weatherViewModel.getCurrentWeather(Constants.LATITUDE,Constants.LONGITUDE,Constants.API_KEY)
                 coVerify { weatherRepository.getCurrentWeather(Constants.LATITUDE,Constants.LONGITUDE,Constants.API_KEY) }
-                weatherViewModel.weatherState.test {
+                weatherViewModel.currentWeatherState.test {
                     Assertions.assertEquals(awaitItem(), testCurrentWeatherResponseResult)
                 }
             }
