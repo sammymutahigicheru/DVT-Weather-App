@@ -94,9 +94,19 @@ dependencies {
     implementation("org.koin:koin-android-scope:2.1.5")
     implementation("org.koin:koin-androidx-viewmodel:2.1.5")
 
+    //Dexter
+    implementation("com.karumi:dexter:6.2.3")
+
 
     //Threading
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+
+    implementation("com.google.android.gms:play-services-auth:19.2.0")
+    implementation("com.google.android.gms:play-services-auth-api-phone:17.5.1")
+    implementation("com.google.android.gms:play-services-location:18.0.0")
+
+    //palette
+    implementation 'androidx.palette:palette-ktx:1.0.0'
 
     //TEST
     testImplementation 'junit:junit:4.13.2'

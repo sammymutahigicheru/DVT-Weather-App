@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -49,23 +48,12 @@
             app:layout_constraintTop_toBottomOf="@+id/temperature_textview"
             tools:text="Rainy" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_last_updated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:textColor="@android:color/white"
-            app:layout_constraintEnd_toEndOf="@+id/temperature_textview"
-            app:layout_constraintStart_toStartOf="@+id/temperature_textview"
-            app:layout_constraintTop_toBottomOf="@+id/weather_description_textview"
-            tools:text="Last updated 2020-09-11, 15:34" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_min_title"
+        android:id="@+id/minimum_temperature_texview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -79,7 +67,7 @@
         tools:text="10" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_current_title"
+        android:id="@+id/current_temperature_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
@@ -88,20 +76,20 @@
 
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/tv_current_value"
-        app:layout_constraintTop_toTopOf="@+id/tv_min_title"
+        app:layout_constraintTop_toTopOf="@+id/minimum_temperature_texview"
         tools:text="15" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_max_title"
+        android:id="@+id/maximum_temperature_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/tv_max_value"
+        app:layout_constraintEnd_toEndOf="@+id/maximum_temperature_textview"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/tv_max_value"
-        app:layout_constraintTop_toTopOf="@+id/tv_min_title"
-        tools:text="20" />
+        app:layout_constraintStart_toStartOf="@+id/maximum_temperature_textview"
+        app:layout_constraintTop_toTopOf="@+id/minimum_temperature_texview"
+        tools:text="27" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_min_value"
@@ -115,7 +103,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_min_title" />
+        app:layout_constraintTop_toBottomOf="@+id/minimum_temperature_texview" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_current_value"
@@ -123,13 +111,13 @@
         android:layout_height="wrap_content"
         android:text="current"
         android:textColor="@android:color/white"
-        app:layout_constraintEnd_toStartOf="@+id/tv_max_value"
+        app:layout_constraintEnd_toStartOf="@+id/maximum_temperature_textview"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/tv_min_value"
         app:layout_constraintTop_toTopOf="@+id/tv_min_value" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_max_value"
+        android:id="@+id/maximum_temperature_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -141,7 +129,7 @@
         app:layout_constraintTop_toTopOf="@+id/tv_current_value" />
 
     <View
-        android:id="@+id/view1"
+        android:id="@+id/view"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="8dp"
@@ -151,7 +139,7 @@
         app:layout_constraintTop_toBottomOf="@id/tv_min_value" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/weeekly_recycler"
+        android:id="@+id/weekly_forecast_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"

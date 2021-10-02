@@ -37,7 +37,7 @@ internal class WeatherViewModelTest : Spek({
 
         beforeEachTest {
             weatherViewModel =
-                WeatherViewModel(weatherRepository = weatherRepository)
+                WeatherViewModel(weatherRepository = weatherRepository, null)
         }
 
         test("Assert that an event was received and return it") {
