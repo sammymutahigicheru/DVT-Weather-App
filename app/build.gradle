@@ -69,7 +69,6 @@ android {
 
 dependencies {
     //internal libs
-    implementation(project(":internal:core"))
     implementation(project(":internal:data"))
     implementation(project(":internal:network"))
     //app dependencies
