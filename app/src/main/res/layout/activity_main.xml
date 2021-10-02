@@ -2,17 +2,152 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:animateLayoutChanges="true"
+    android:background="@color/sunny"
+    android:fitsSystemWindows="false"
+    tools:context=".ui.MainActivity">
 
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/current_weather_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/forest_sunny"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/temperature_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline2"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias=".35"
+            tools:text="15" />
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/weather_description_textview"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/temperature_textview"
+            app:layout_constraintStart_toStartOf="@+id/temperature_textview"
+            app:layout_constraintTop_toBottomOf="@+id/temperature_textview"
+            tools:text="Rainy" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/minimum_temperature_texview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:layout_marginTop="8dp"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/tv_min_value"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="@+id/tv_min_value"
+        app:layout_constraintTop_toBottomOf="@+id/current_weather_layout"
+        tools:text="10" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/current_temperature_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/tv_current_value"
+
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/tv_current_value"
+        app:layout_constraintTop_toTopOf="@+id/minimum_temperature_texview"
+        tools:text="15" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/maximum_temperature_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/maximum_temperature_textview"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/maximum_temperature_textview"
+        app:layout_constraintTop_toTopOf="@+id/minimum_temperature_texview"
+        tools:text="27" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_min_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:text="min"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toStartOf="@+id/tv_current_value"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/minimum_temperature_texview" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_current_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="current"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toStartOf="@+id/maximum_temperature_textview"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_min_value"
+        app:layout_constraintTop_toTopOf="@+id/tv_min_value" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/maximum_temperature_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="max"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_current_value"
+        app:layout_constraintTop_toTopOf="@+id/tv_current_value" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_min_value" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/weekly_forecast_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_min_value" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

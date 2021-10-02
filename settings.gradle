@@ -8,3 +8,6 @@ dependencyResolutionManagement {
 }
 rootProject.name = "DVTWeather App"
 include ':app'
+include ':internal'
+include ':internal:data'
+include ':internal:network'

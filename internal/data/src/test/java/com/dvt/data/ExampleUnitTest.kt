@@ -1,4 +1,4 @@
-package com.dvt.dvtweatherapp
+package com.dvt.data
 
 import org.junit.Test
 
