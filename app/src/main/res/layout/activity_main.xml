@@ -48,6 +48,18 @@
             app:layout_constraintTop_toBottomOf="@+id/temperature_textview"
             tools:text="Rainy" />
 
+        <ImageView
+            android:id="@+id/favourite_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            app:tint="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_favorite_border_24"
+            android:contentDescription="Favorite Icon"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

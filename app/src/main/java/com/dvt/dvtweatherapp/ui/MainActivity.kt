@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.palette.graphics.Palette
+import com.dvt.core.extensions.showSuccessSnackbar
 import com.dvt.core.helpers.isOnline
 import com.dvt.dvtweatherapp.BuildConfig
 import com.dvt.dvtweatherapp.R
@@ -27,6 +28,7 @@ import com.dvt.dvtweatherapp.utils.Constants
 import com.dvt.dvtweatherapp.utils.ResponseState
 import com.dvt.dvtweatherapp.utils.extensions.isLocationEnabled
 import com.dvt.dvtweatherapp.utils.extensions.isLocationPermissionEnabled
+import com.dvt.dvtweatherapp.utils.mappers.toCurrentWeather
 import com.dvt.dvtweatherapp.utils.mappers.toForecast
 import com.dvt.dvtweatherapp.utils.mappers.toWeather
 import com.dvt.dvtweatherapp.viewmodel.WeatherViewModel
@@ -130,7 +132,28 @@ class MainActivity : AppCompatActivity() {
             currentTemperatureTextview.text = "${currentWeather.currentTemperature} ℃"
             maximumTemperatureTitle.text = "${currentWeather.maximumTemperature} ℃"
         }
+        updateBackground(currentWeather)
+        saveCurrentWeatherAsFavourite(currentWeather)
+    }
 
+    private fun saveCurrentWeatherAsFavourite(currentWeather: Weather) {
+        binding.apply {
+            favouriteIcon.setOnClickListener {
+                favouriteIcon.setImageResource(R.drawable.ic_baseline_favorite_24)
+                //update favourites column
+                currentWeather.isFavourite = 1
+                viewModel.saveCurrentWeatherAsFavorite(currentWeather.toCurrentWeather())
+                    .invokeOnCompletion {
+                        this@MainActivity.runOnUiThread {
+                            val message = "Current weather saved as favourite successfully."
+                            binding.root.showSuccessSnackbar(message)
+                        }
+                    }
+            }
+        }
+    }
+
+    private fun updateBackground(currentWeather: Weather) {
         when {
             currentWeather.description.contains("rain", true) -> {
                 binding.apply {
@@ -171,7 +194,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launchWhenStarted {
             viewModel.getCurrentLocation().collect { lastLocation ->
                 cancel("canceling location updates $lastLocation")
-                if (isOnline){
+                if (isOnline) {
                     viewModel.getCurrentWeather(
                         lastLocation.latitude.toString(),
                         lastLocation.longitude.toString(),
@@ -187,7 +210,7 @@ class MainActivity : AppCompatActivity() {
                     fetchCurrentWeather()
                     fetchWeatherForecast()
 
-                }else{
+                } else {
                     //the user is offline
                     fetchOfflineCurrentWeather()
                     fetchOfflineWeatherForecast()

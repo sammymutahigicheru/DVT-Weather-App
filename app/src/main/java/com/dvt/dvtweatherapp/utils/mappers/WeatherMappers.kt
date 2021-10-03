@@ -30,3 +30,16 @@ internal fun CurrentWeather.toWeather(): Weather {
         this.description
     )
 }
+
+internal fun Weather.toCurrentWeather(): CurrentWeather {
+    return CurrentWeather(
+        this.id,
+        this.latitude,
+        this.longitude,
+        this.isFavourite,
+        this.currentTemperature,
+        this.maximumTemperature,
+        this.minimumTemperature,
+        this.description
+    )
+}
