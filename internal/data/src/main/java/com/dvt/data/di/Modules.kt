@@ -21,6 +21,7 @@ private val databaseModule: Module = module {
 private val daoModule: Module = module {
     single { get<WeatherDatabase>().currentWeatherDao() }
     single { get<WeatherDatabase>().weatherForecastDao() }
+    single { get<WeatherDatabase>().favouritesDao() }
 }
 
 val dataModules: List<Module> = listOf(

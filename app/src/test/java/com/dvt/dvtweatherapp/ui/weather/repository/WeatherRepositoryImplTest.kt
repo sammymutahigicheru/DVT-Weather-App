@@ -1,4 +1,4 @@
-package com.dvt.dvtweatherapp.repository
+package com.dvt.dvtweatherapp.ui.weather.repository
 
 import com.dvt.network.api.WeatherAPI
 import com.dvt.dvtweatherapp.dispatcher.WeatherRequestDispatcher

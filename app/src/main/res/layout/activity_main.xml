@@ -8,7 +8,7 @@
     android:animateLayoutChanges="true"
     android:background="@color/sunny"
     android:fitsSystemWindows="false"
-    tools:context=".ui.MainActivity">
+    tools:context=".ui.weather.main.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/current_weather_layout"
@@ -46,12 +46,12 @@
             app:layout_constraintEnd_toEndOf="@+id/temperature_textview"
             app:layout_constraintStart_toStartOf="@+id/temperature_textview"
             app:layout_constraintTop_toBottomOf="@+id/temperature_textview"
-            tools:text="Rainy" />
+            tools:text="Sunny" />
 
         <ImageView
             android:id="@+id/favourite_icon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="?attr/actionBarSize"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             app:tint="@android:color/white"
@@ -160,6 +160,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_min_value" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/favorites_floating_action_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
+        android:src="@drawable/ic_baseline_location_on_24"
+        app:backgroundTint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/sunny"
+        android:contentDescription="Floating Action Button" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

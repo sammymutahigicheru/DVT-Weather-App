@@ -1,9 +1,10 @@
-package com.dvt.dvtweatherapp.repository
+package com.dvt.dvtweatherapp.ui.weather.repository
 
-import android.content.Context
 import com.dvt.data.database.dao.CurrentWeatherDao
+import com.dvt.data.database.dao.FavouritesDao
 import com.dvt.data.database.dao.ForecastDao
 import com.dvt.data.database.entities.CurrentWeather
+import com.dvt.data.database.entities.Favourites
 import com.dvt.data.database.entities.ForecastWeather
 import com.dvt.network.api.WeatherAPI
 import com.dvt.network.models.CurrentWeatherResponse
@@ -11,12 +12,12 @@ import com.dvt.network.models.OneShotForeCastResponse
 import com.dvt.network.network.DVTResult
 import com.dvt.network.network.apiCall
 import kotlinx.coroutines.flow.Flow
-import timber.log.Timber
 
 class WeatherRepositoryImplementation(
     private val weatherApi: WeatherAPI,
     private val currentWeatherDao: CurrentWeatherDao,
-    private val weatherForecastDao: ForecastDao
+    private val weatherForecastDao: ForecastDao,
+    private val favouritesDao: FavouritesDao
 ) : WeatherRepository {
     override suspend fun getCurrentWeather(
         latitude: String,
@@ -53,8 +54,8 @@ class WeatherRepositoryImplementation(
         weatherForecastDao.insert(weather)
     }
 
-    override suspend fun updateCurrentWeather(weather: CurrentWeather) {
-        currentWeatherDao.update(weather)
+    override suspend fun saveFavourite(favourites: Favourites) {
+        favouritesDao.insert(favourites)
     }
 
 }

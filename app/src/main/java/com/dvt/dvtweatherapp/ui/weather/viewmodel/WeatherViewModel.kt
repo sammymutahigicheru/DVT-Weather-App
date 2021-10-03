@@ -1,4 +1,4 @@
-package com.dvt.dvtweatherapp.viewmodel
+package com.dvt.dvtweatherapp.ui.weather.viewmodel
 
 import android.annotation.SuppressLint
 import android.location.Location
@@ -8,7 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.dvt.core.mappers.toCurrentWeather
 import com.dvt.core.mappers.toWeatherForecast
 import com.dvt.data.database.entities.CurrentWeather
-import com.dvt.dvtweatherapp.repository.WeatherRepository
+import com.dvt.data.database.entities.Favourites
+import com.dvt.dvtweatherapp.ui.weather.repository.WeatherRepository
 import com.dvt.dvtweatherapp.utils.ResponseState
 import com.dvt.network.network.DVTResult
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -106,8 +107,8 @@ class WeatherViewModel(
 
     suspend fun fetchOfflineWeatherForecast() = weatherRepository.fetchOfflineCurrentForecastWeather()
 
-    fun saveCurrentWeatherAsFavorite(weather: CurrentWeather) = viewModelScope.launch(Dispatchers.IO) {
-        weatherRepository.updateCurrentWeather(weather)
+    fun saveCurrentWeatherAsFavorite(favourites: Favourites) = viewModelScope.launch(Dispatchers.IO) {
+        weatherRepository.saveFavourite(favourites)
     }
 
     companion object {

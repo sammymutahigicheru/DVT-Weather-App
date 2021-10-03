@@ -29,5 +29,8 @@ data class CurrentWeatherResponse(
     @Json(name = "weather")
     val weather: List<Weather>,
     @Json(name = "wind")
-    val wind: Wind
+    val wind: Wind,
+
+    @Transient
+    var locationName:String = ""
 )
