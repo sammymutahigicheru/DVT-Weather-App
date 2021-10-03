@@ -1,11 +1,7 @@
-package com.dvt.data.database.entities
+package com.dvt.dvtweatherapp.data
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-
-@Entity
-data class CurrentWeather(
-    @PrimaryKey(autoGenerate = false)val id: Int,
+data class Weather(
+    val id: Int,
     val latitude: Double,
     val longitude:Double,
     val isFavourite:Int = 0,

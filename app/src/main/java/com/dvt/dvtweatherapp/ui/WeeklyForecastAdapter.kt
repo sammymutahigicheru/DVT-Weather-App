@@ -7,24 +7,27 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.dvt.dvtweatherapp.R
+import com.dvt.dvtweatherapp.data.Forecast
 import com.dvt.dvtweatherapp.databinding.WeeklyForecastRowItemBinding
 import com.dvt.dvtweatherapp.utils.helpers.convertToDay
 import com.dvt.network.models.Daily
+import timber.log.Timber
 
 class WeeklyForecastAdapter :
-    ListAdapter<Daily, WeeklyForecastAdapter.WeeklyForeCastViewHolder>(diffUtil) {
+    ListAdapter<Forecast, WeeklyForecastAdapter.WeeklyForeCastViewHolder>(diffUtil) {
 
     inner class WeeklyForeCastViewHolder(private val binding: WeeklyForecastRowItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         @SuppressLint("SetTextI18n")
-        fun bind(item: Daily) {
+        fun bind(item: Forecast) {
             binding.apply {
-                weekDayTextview.text = convertToDay(item.dt.toLong())
-                temperatureValueTextview.text = "${item.temp.day} ℃"
+                weekDayTextview.text = item.day
+                temperatureValueTextview.text = "${item.temperature} ℃"
             }
-            val weatherId = item.weather[0].id.toString()
-            val icon = item.weather[0].icon
+            val weatherId = item.id.toString()
+            Timber.e("Weather Id: $weatherId")
+            Timber.e("Day ${item.day}")
             setIcons(weatherId)
         }
 
@@ -58,7 +61,7 @@ class WeeklyForecastAdapter :
                 }
 
                 //sunny/clear 8XX
-                id.equals("800", true) -> {
+                id.startsWith("8", true) -> {
                     updateIcon(R.drawable.clear)
                 }
             }
@@ -90,12 +93,12 @@ class WeeklyForecastAdapter :
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<Daily>() {
-            override fun areItemsTheSame(oldItem: Daily, newItem: Daily): Boolean {
-                return oldItem.dt == newItem.dt
+        val diffUtil = object : DiffUtil.ItemCallback<Forecast>() {
+            override fun areItemsTheSame(oldItem: Forecast, newItem: Forecast): Boolean {
+                return oldItem.day == newItem.day
             }
 
-            override fun areContentsTheSame(oldItem: Daily, newItem: Daily): Boolean {
+            override fun areContentsTheSame(oldItem: Forecast, newItem: Forecast): Boolean {
                 return oldItem == newItem
             }
 

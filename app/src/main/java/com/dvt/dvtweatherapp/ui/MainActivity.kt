@@ -17,13 +17,18 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.palette.graphics.Palette
+import com.dvt.core.helpers.isOnline
 import com.dvt.dvtweatherapp.BuildConfig
 import com.dvt.dvtweatherapp.R
+import com.dvt.dvtweatherapp.data.Forecast
+import com.dvt.dvtweatherapp.data.Weather
 import com.dvt.dvtweatherapp.databinding.ActivityMainBinding
 import com.dvt.dvtweatherapp.utils.Constants
 import com.dvt.dvtweatherapp.utils.ResponseState
 import com.dvt.dvtweatherapp.utils.extensions.isLocationEnabled
 import com.dvt.dvtweatherapp.utils.extensions.isLocationPermissionEnabled
+import com.dvt.dvtweatherapp.utils.mappers.toForecast
+import com.dvt.dvtweatherapp.utils.mappers.toWeather
 import com.dvt.dvtweatherapp.viewmodel.WeatherViewModel
 import com.dvt.network.models.CurrentWeatherResponse
 import com.dvt.network.models.OneShotForeCastResponse
@@ -43,6 +48,10 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: WeatherViewModel by viewModel()
 
     private lateinit var progressDialog: MaterialAlertDialogBuilder
+
+    private val isOnline by lazy {
+        isOnline(this)
+    }
 
     @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,7 +76,7 @@ class MainActivity : AppCompatActivity() {
                     is ResponseState.Result<*> -> {
                         progress.dismiss()
                         val result: OneShotForeCastResponse = state.data as OneShotForeCastResponse
-                        setUpRecyclerView(result)
+                        setUpRecyclerView(result.toForecast())
                     }
                     is ResponseState.Error -> {
                         Timber.e("Error: ${state.message}")
@@ -78,13 +87,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpRecyclerView(result: OneShotForeCastResponse) {
+    private fun setUpRecyclerView(result: List<Forecast>) {
         val weeklyForecastAdapter = WeeklyForecastAdapter()
         binding.weeklyForecastRecyclerview.apply {
             adapter = weeklyForecastAdapter
             hasFixedSize()
         }
-        weeklyForecastAdapter.submitList(result.daily)
+        weeklyForecastAdapter.submitList(result)
     }
 
     private fun fetchCurrentWeather() {
@@ -100,7 +109,7 @@ class MainActivity : AppCompatActivity() {
                         progress.dismiss()
                         val currentWeather: CurrentWeatherResponse =
                             state.data as CurrentWeatherResponse
-                        setUpView(currentWeather)
+                        setUpView(currentWeather.toWeather())
                     }
                     is ResponseState.Error -> {
                         Timber.e("Error: ${state.message}")
@@ -112,35 +121,36 @@ class MainActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n", "ResourceAsColor")
-    private fun setUpView(currentWeather: CurrentWeatherResponse) {
+    private fun setUpView(currentWeather: Weather) {
         Timber.e("Current Weather $currentWeather")
         binding.apply {
-            temperatureTextview.text = "${currentWeather.main.temp} ℃"
-            weatherDescriptionTextview.text = currentWeather.weather[0].description
-            minimumTemperatureTexview.text = "${currentWeather.main.tempMin} ℃"
-            currentTemperatureTextview.text = "${currentWeather.main.temp} ℃"
-            maximumTemperatureTitle.text = "${currentWeather.main.tempMax} ℃"
+            temperatureTextview.text = "${currentWeather.currentTemperature} ℃"
+            weatherDescriptionTextview.text = currentWeather.description
+            minimumTemperatureTexview.text = "${currentWeather.minimumTemperature} ℃"
+            currentTemperatureTextview.text = "${currentWeather.currentTemperature} ℃"
+            maximumTemperatureTitle.text = "${currentWeather.maximumTemperature} ℃"
         }
+
         when {
-            currentWeather.weather[0].description.contains("rain", true) -> {
+            currentWeather.description.contains("rain", true) -> {
                 binding.apply {
-                    rootLayout.setBackgroundColor(R.color.rainy)
+                    rootLayout.setBackgroundColor(resources.getColor(R.color.rainy))
                     currentWeatherLayout.setBackgroundResource(R.drawable.forest_rainy)
                 }
                 val bitMap: Bitmap = getBitmapResource(R.drawable.forest_rainy)
                 updateStatusBarColor(bitMap)
             }
-            currentWeather.weather[0].description.contains("sun", true) -> {
+            currentWeather.description.contains("sun", true) -> {
                 binding.apply {
-                    rootLayout.setBackgroundColor(R.color.sunny)
+                    rootLayout.setBackgroundColor(resources.getColor(R.color.sunny))
                     currentWeatherLayout.setBackgroundResource(R.drawable.forest_sunny)
                 }
                 val bitMap: Bitmap = getBitmapResource(R.drawable.forest_sunny)
                 updateStatusBarColor(bitMap)
             }
-            currentWeather.weather[0].description.contains("cloud", true) -> {
+            currentWeather.description.contains("cloud", true) -> {
                 binding.apply {
-                    rootLayout.setBackgroundColor(R.color.cloudy)
+                    rootLayout.setBackgroundColor(resources.getColor(R.color.cloudy))
                     currentWeatherLayout.setBackgroundResource(R.drawable.forest_cloudy)
                 }
                 val bitMap: Bitmap = getBitmapResource(R.drawable.forest_cloudy)
@@ -161,20 +171,44 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launchWhenStarted {
             viewModel.getCurrentLocation().collect { lastLocation ->
                 cancel("canceling location updates $lastLocation")
-                viewModel.getCurrentWeather(
-                    lastLocation.latitude.toString(),
-                    lastLocation.longitude.toString(),
-                    Constants.API_KEY
-                )
-                viewModel.getWeatherForecast(
-                    lastLocation.latitude.toString(),
-                    lastLocation.longitude.toString(),
-                    Constants.API_KEY
-                )
+                if (isOnline){
+                    viewModel.getCurrentWeather(
+                        lastLocation.latitude.toString(),
+                        lastLocation.longitude.toString(),
+                        Constants.API_KEY
+                    )
+                    viewModel.getWeatherForecast(
+                        lastLocation.latitude.toString(),
+                        lastLocation.longitude.toString(),
+                        Constants.API_KEY
+                    )
+
+                    //collect current weather and forecast
+                    fetchCurrentWeather()
+                    fetchWeatherForecast()
+
+                }else{
+                    //the user is offline
+                    fetchOfflineCurrentWeather()
+                    fetchOfflineWeatherForecast()
+                }
             }
-        }.invokeOnCompletion {
-            fetchCurrentWeather()
-            fetchWeatherForecast()
+        }
+    }
+
+    private fun fetchOfflineWeatherForecast() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.fetchOfflineWeatherForecast().collect { forecast ->
+                setUpRecyclerView(forecast.toForecast())
+            }
+        }
+    }
+
+    private fun fetchOfflineCurrentWeather() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.fetchOfflineCurrentWeather().collect { currentWeather ->
+                setUpView(currentWeather.toWeather())
+            }
         }
     }
 

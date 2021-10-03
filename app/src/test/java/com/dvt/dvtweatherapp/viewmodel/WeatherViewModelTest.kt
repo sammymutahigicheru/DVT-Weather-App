@@ -5,7 +5,7 @@ import com.dvt.dvtweatherapp.commons.Constants
 import com.dvt.dvtweatherapp.helpers.testCurrentWeatherResponseResult
 import com.dvt.dvtweatherapp.helpers.testWeatherResponse
 import com.dvt.network.network.DVTResult
-import com.dvt.network.repository.WeatherRepository
+import com.dvt.dvtweatherapp.repository.WeatherRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

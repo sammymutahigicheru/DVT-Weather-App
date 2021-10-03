@@ -7,9 +7,9 @@ import androidx.room.PrimaryKey
 @Entity
 data class ForecastWeather(
     @PrimaryKey(autoGenerate = false)
-    @ColumnInfo(name = "day")
     val day: String = "",
+    val id:Int,
     val latitude: Double,
-    val long: Double,
+    val longitude: Double,
     val temperature: Int
 )

@@ -1,8 +1,7 @@
 package com.dvt.dvtweatherapp.di
 
-import com.dvt.core.isOnline
 import com.dvt.dvtweatherapp.viewmodel.WeatherViewModel
-import com.dvt.network.repository.WeatherRepository
+import com.dvt.dvtweatherapp.repository.WeatherRepository
 import com.dvt.dvtweatherapp.repository.WeatherRepositoryImplementation
 import com.google.android.gms.location.LocationServices
 import org.koin.android.ext.koin.androidContext
@@ -11,7 +10,7 @@ import org.koin.core.module.Module
 import org.koin.dsl.module
 
 val repositoryModule: Module = module {
-    single<WeatherRepository> { WeatherRepositoryImplementation(get(),get()) }
+    single<WeatherRepository> { WeatherRepositoryImplementation(get(),get(),get()) }
 }
 
 val viewModelModule: Module = module {

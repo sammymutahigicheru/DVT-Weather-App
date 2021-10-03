@@ -6,12 +6,6 @@ import android.content.pm.PackageManager
 import android.location.LocationManager
 import androidx.core.app.ActivityCompat
 import androidx.core.location.LocationManagerCompat
-import com.dvt.dvtweatherapp.model.LocationException
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 
 fun Context.isLocationPermissionEnabled(): Boolean {
     return ActivityCompat.checkSelfPermission(

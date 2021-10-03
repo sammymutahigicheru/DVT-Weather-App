@@ -1,12 +1,9 @@
-package com.dvt.core
+package com.dvt.core.helpers
 
 import android.content.Context
-import androidx.core.content.ContextCompat.getSystemService
-
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-
 
 fun isOnline(context: Context): Boolean {
     val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -15,7 +12,8 @@ fun isOnline(context: Context): Boolean {
         val n = cm.activeNetwork
         if (n != null) {
             val nc = cm.getNetworkCapabilities(n)
-            return nc!!.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || nc.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+            return nc!!.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || nc.hasTransport(
+                NetworkCapabilities.TRANSPORT_WIFI)
         }
         return false
     } else {
@@ -23,4 +21,3 @@ fun isOnline(context: Context): Boolean {
         return netInfo != null && netInfo.isConnectedOrConnecting
     }
 }
-

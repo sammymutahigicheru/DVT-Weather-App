@@ -12,7 +12,9 @@ private val databaseModule: Module = module {
             androidContext(),
             WeatherDatabase::class.java,
             "dvt-weather-db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 }
 
