@@ -1,6 +1,7 @@
 package com.dvt.dvtweatherapp
 
 import android.app.Application
+import com.dvt.data.di.dataModules
 import com.dvt.dvtweatherapp.di.appModules
 import com.dvt.network.di.networkModules
 import org.koin.android.ext.koin.androidContext
@@ -32,6 +33,7 @@ class DVTWeatherApp:Application() {
                 val modules = mutableListOf<Module>().apply {
                     addAll(appModules)
                     addAll(networkModules)
+                    addAll(dataModules)
                 }
                 modules(modules)
             }

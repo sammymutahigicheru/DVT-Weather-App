@@ -5,13 +5,17 @@ import android.location.Location
 import android.os.Looper
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dvt.core.mappers.toCurrentWeather
+import com.dvt.core.mappers.toWeatherForecast
+import com.dvt.data.database.entities.CurrentWeather
+import com.dvt.dvtweatherapp.repository.WeatherRepository
 import com.dvt.dvtweatherapp.utils.ResponseState
 import com.dvt.network.network.DVTResult
-import com.dvt.network.repository.WeatherRepository
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
@@ -39,7 +43,10 @@ class WeatherViewModel(
                 val result = weatherRepository.getCurrentWeather(latitude, longitude, apiKey)
             ) {
                 is DVTResult.Success -> {
-                    _currentWeatherState.value = ResponseState.Result(result.data)
+                    //save current weather
+                    val result = result.data
+                    weatherRepository.saveCurrentWeather(result.toCurrentWeather())
+                    _currentWeatherState.value = ResponseState.Result(result)
                 }
                 is DVTResult.DVTError -> {
                     _currentWeatherState.value =
@@ -58,7 +65,10 @@ class WeatherViewModel(
                 val result = weatherRepository.getWeatherForecast(latitude, longitude, apiKey)
             ) {
                 is DVTResult.Success -> {
-                    _weatherForecastState.value = ResponseState.Result(result.data)
+                    val result = result.data
+                    //save weather forecast
+                    weatherRepository.saveWeatherForecast(result.toWeatherForecast())
+                    _weatherForecastState.value = ResponseState.Result(result)
                 }
                 is DVTResult.DVTError -> {
                     _weatherForecastState.value =
@@ -89,6 +99,15 @@ class WeatherViewModel(
         }
         client?.requestLocationUpdates(locationRequest, callBack, Looper.getMainLooper())
         awaitClose { client?.let { it.removeLocationUpdates(callBack) } }
+    }
+
+    //db operations
+    suspend fun fetchOfflineCurrentWeather() = weatherRepository.fetchOfflineCurrentWeather()
+
+    suspend fun fetchOfflineWeatherForecast() = weatherRepository.fetchOfflineCurrentForecastWeather()
+
+    fun saveCurrentWeatherAsFavorite(weather: CurrentWeather) = viewModelScope.launch(Dispatchers.IO) {
+        weatherRepository.updateCurrentWeather(weather)
     }
 
     companion object {

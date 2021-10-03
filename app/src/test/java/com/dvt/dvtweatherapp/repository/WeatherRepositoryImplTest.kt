@@ -4,8 +4,6 @@ import com.dvt.network.api.WeatherAPI
 import com.dvt.dvtweatherapp.dispatcher.WeatherRequestDispatcher
 import com.dvt.network.models.CurrentWeatherResponse
 import com.dvt.network.network.DVTResult
-import com.dvt.network.repository.WeatherRepository
-import com.dvt.network.repository.WeatherRepositoryImplementation
 import com.google.common.truth.Truth
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
