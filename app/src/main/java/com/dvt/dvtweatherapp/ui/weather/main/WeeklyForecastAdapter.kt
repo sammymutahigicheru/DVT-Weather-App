@@ -1,4 +1,4 @@
-package com.dvt.dvtweatherapp.ui
+package com.dvt.dvtweatherapp.ui.weather.main
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -9,8 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dvt.dvtweatherapp.R
 import com.dvt.dvtweatherapp.data.Forecast
 import com.dvt.dvtweatherapp.databinding.WeeklyForecastRowItemBinding
-import com.dvt.dvtweatherapp.utils.helpers.convertToDay
-import com.dvt.network.models.Daily
 import timber.log.Timber
 
 class WeeklyForecastAdapter :
@@ -77,14 +75,14 @@ class WeeklyForecastAdapter :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): WeeklyForecastAdapter.WeeklyForeCastViewHolder {
+    ): WeeklyForeCastViewHolder {
         return WeeklyForeCastViewHolder(
             WeeklyForecastRowItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
     override fun onBindViewHolder(
-        holder: WeeklyForecastAdapter.WeeklyForeCastViewHolder,
+        holder: WeeklyForeCastViewHolder,
         position: Int
     ) {
         val item = getItem(position)

@@ -1,11 +1,11 @@
-package com.dvt.dvtweatherapp.viewmodel
+package com.dvt.dvtweatherapp.ui.weather.viewmodel
 
 import app.cash.turbine.test
 import com.dvt.dvtweatherapp.commons.Constants
 import com.dvt.dvtweatherapp.helpers.testCurrentWeatherResponseResult
 import com.dvt.dvtweatherapp.helpers.testWeatherResponse
 import com.dvt.network.network.DVTResult
-import com.dvt.dvtweatherapp.repository.WeatherRepository
+import com.dvt.dvtweatherapp.ui.weather.repository.WeatherRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

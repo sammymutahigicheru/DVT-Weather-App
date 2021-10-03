@@ -1,6 +1,6 @@
 package com.dvt.dvtweatherapp.data
 
-data class Weather(
+data class FavouriteWeather(
     val id: Int,
     val latitude: Double,
     val longitude:Double,

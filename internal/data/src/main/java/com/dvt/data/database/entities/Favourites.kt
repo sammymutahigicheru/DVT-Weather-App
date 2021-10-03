@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class CurrentWeather(
+data class Favourites(
     @PrimaryKey(autoGenerate = false)val id: Int,
     val latitude: Double,
     val longitude:Double,

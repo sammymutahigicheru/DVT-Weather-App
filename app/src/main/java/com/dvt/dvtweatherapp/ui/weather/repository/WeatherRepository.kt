@@ -1,6 +1,7 @@
-package com.dvt.dvtweatherapp.repository
+package com.dvt.dvtweatherapp.ui.weather.repository
 
 import com.dvt.data.database.entities.CurrentWeather
+import com.dvt.data.database.entities.Favourites
 import com.dvt.data.database.entities.ForecastWeather
 import com.dvt.network.models.CurrentWeatherResponse
 import com.dvt.network.models.OneShotForeCastResponse
@@ -25,5 +26,5 @@ interface WeatherRepository {
     suspend fun fetchOfflineCurrentForecastWeather(): Flow<List<ForecastWeather>>
     suspend fun saveCurrentWeather(weather: CurrentWeather)
     suspend fun saveWeatherForecast(weather: List<ForecastWeather>)
-    suspend fun updateCurrentWeather(weather: CurrentWeather)
+    suspend fun saveFavourite(favourites: Favourites)
 }
