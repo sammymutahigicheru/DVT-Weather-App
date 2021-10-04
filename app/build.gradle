@@ -1,27 +1,38 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id("kotlin-android-extensions")
+    id 'kotlin-parcelize'
     id 'kotlin-kapt'
     id("de.mannodermaus.android-junit5")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id 'jacoco'
+    id("io.gitlab.arturbosch.detekt")
 }
 
 android {
     compileSdk 31
 
     defaultConfig {
+        def versionMajor = 1
+        def versionMinor = 1
+        def versionPatch = 2
+
         applicationId "com.dvt.dvtweatherapp"
         minSdk 21
         targetSdk 31
-        versionCode 1
-        versionName "1.0"
+        versionCode versionMajor * 10000 + versionMinor * 100 + versionPatch //10101 i.e 1.1.1 version
+        versionName "$versionMajor.$versionMinor.$versionPatch"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
+        debug{
+            testCoverageEnabled true
+        }
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -31,8 +42,27 @@ android {
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
     }
 
-    viewBinding {
-        enabled true
+    buildFeatures {
+        viewBinding = true
+    }
+
+    task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+
+        reports {
+            xml.enabled = true
+            html.enabled = true
+        }
+
+        def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
+        def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
+        def mainSrc = "${project.projectDir}/src/main/java"
+
+        sourceDirectories.setFrom(files([mainSrc]))
+        classDirectories.setFrom(files([debugTree]))
+        executionData.setFrom(fileTree(dir: "$buildDir", includes: [
+                "jacoco/testDebugUnitTest.exec",
+                "outputs/code-coverage/connected/*coverage.ec"
+        ]))
     }
 
     testOptions.unitTests {
@@ -62,8 +92,12 @@ android {
             }
         }
         unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
             testLogging.events = ["passed", "skipped", "failed"]
         }
+        unitTests.returnDefaultValues = true
     }
 }
 
@@ -89,7 +123,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
 
-    // Debug - for debug builds only
+    // Debug
     implementation('com.jakewharton.timber:timber:5.0.1')
 
     //DI
@@ -103,6 +137,8 @@ dependencies {
     //viewpager2
     implementation("androidx.viewpager2:viewpager2:1.0.0")
 
+    //GOOGLE MAPS
+    implementation("com.google.android.gms:play-services-maps:17.0.1")
 
     //Threading
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
@@ -166,5 +202,19 @@ dependencies {
     androidTestImplementation("com.jakewharton.espresso:okhttp3-idling-resource:1.0.0")
     androidTestImplementation("org.koin:koin-test:2.1.5")
     implementation("androidx.test.espresso:espresso-idling-resource:3.4.0")
+
+}
+detekt {
+    buildUponDefaultConfig = true
+    allRules = false
+    config = files("${project.rootDir}/detekt.yml")
+    baseline = file("${project.rootDir}/detekt-baseline.xml")
+
+    reports {
+        html.enabled = true
+        xml.enabled = true
+        txt.enabled = true
+        sarif.enabled = true
+    }
 
 }

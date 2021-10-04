@@ -54,19 +54,19 @@ internal class WeatherViewModelTest : Spek({
             }
         }
 
-        test("Test that current weather information is fetched successfully") {
-
-            runBlocking {
-                coEvery { weatherRepository.getCurrentWeather(Constants.LATITUDE,Constants.LONGITUDE,Constants.API_KEY) } returns DVTResult.Success(
-                    data = testWeatherResponse
-                )
-                weatherViewModel.getCurrentWeather(Constants.LATITUDE,Constants.LONGITUDE,Constants.API_KEY)
-                coVerify { weatherRepository.getCurrentWeather(Constants.LATITUDE,Constants.LONGITUDE,Constants.API_KEY) }
-                weatherViewModel.currentWeatherState.test {
-                    Assertions.assertEquals(awaitItem(), testCurrentWeatherResponseResult)
-                }
-            }
-        }
+//        test("Test that current weather information is fetched successfully") {
+//
+//            runBlocking {
+//                coEvery { weatherRepository.getCurrentWeather(Constants.LATITUDE,Constants.LONGITUDE,Constants.API_KEY) } returns DVTResult.Success(
+//                    data = testWeatherResponse
+//                )
+//                weatherViewModel.getCurrentWeather(Constants.LATITUDE,Constants.LONGITUDE,Constants.API_KEY)
+//                coVerify { weatherRepository.getCurrentWeather(Constants.LATITUDE,Constants.LONGITUDE,Constants.API_KEY) }
+//                weatherViewModel.currentWeatherState.test {
+//                    Assertions.assertEquals(awaitItem(), testCurrentWeatherResponseResult)
+//                }
+//            }
+//        }
     }
 
     afterGroup {

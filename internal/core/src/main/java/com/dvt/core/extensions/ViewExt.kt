@@ -4,7 +4,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 
-fun View.showSuccessSnackbar(message: String) {
+fun View.showSnackbar(message: String) {
     val snackbar = Snackbar.make(this, message, Snackbar.LENGTH_LONG)
 
     snackbar.apply {

@@ -15,9 +15,9 @@ import kotlinx.coroutines.flow.Flow
 
 class WeatherRepositoryImplementation(
     private val weatherApi: WeatherAPI,
-    private val currentWeatherDao: CurrentWeatherDao,
-    private val weatherForecastDao: ForecastDao,
-    private val favouritesDao: FavouritesDao
+    private val currentWeatherDao: CurrentWeatherDao?,
+    private val weatherForecastDao: ForecastDao?,
+    private val favouritesDao: FavouritesDao?
 ) : WeatherRepository {
     override suspend fun getCurrentWeather(
         latitude: String,
@@ -39,23 +39,23 @@ class WeatherRepositoryImplementation(
     }
 
     override suspend fun fetchOfflineCurrentWeather(): Flow<CurrentWeather> {
-        return currentWeatherDao.fetchCurrentWeather()
+        return currentWeatherDao?.fetchCurrentWeather()!!
     }
 
     override suspend fun fetchOfflineCurrentForecastWeather(): Flow<List<ForecastWeather>> {
-        return weatherForecastDao.fetchWeatherForecasts()
+        return weatherForecastDao!!.fetchWeatherForecasts()
     }
 
     override suspend fun saveCurrentWeather(weather: CurrentWeather) {
-        currentWeatherDao.insert(weather)
+        currentWeatherDao!!.insert(weather)
     }
 
     override suspend fun saveWeatherForecast(weather: List<ForecastWeather>) {
-        weatherForecastDao.insert(weather)
+        weatherForecastDao!!.insert(weather)
     }
 
     override suspend fun saveFavourite(favourites: Favourites) {
-        favouritesDao.insert(favourites)
+        favouritesDao!!.insert(favourites)
     }
 
 }

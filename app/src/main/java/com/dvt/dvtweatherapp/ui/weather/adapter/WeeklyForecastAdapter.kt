@@ -1,4 +1,4 @@
-package com.dvt.dvtweatherapp.ui.weather.main
+package com.dvt.dvtweatherapp.ui.weather.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
