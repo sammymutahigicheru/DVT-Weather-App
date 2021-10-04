@@ -1,5 +1,6 @@
 package com.dvt.dvtweatherapp.ui.weather.repository
 
+import com.dvt.dvtweatherapp.commons.Constants
 import com.dvt.network.api.WeatherAPI
 import com.dvt.dvtweatherapp.dispatcher.WeatherRequestDispatcher
 import com.dvt.network.models.CurrentWeatherResponse
@@ -68,7 +69,7 @@ class WeatherRepositoryImplTest: Spek({
 
             Given("Make the actual API call to get the result") {
                 runBlocking {
-                    result = weatherRepository.getCurrentWeather("-1.208571","36.900341","c1373764270eceaee171213e6b2560c7")
+                    result = weatherRepository.getCurrentWeather(Constants.LATITUDE,Constants.LONGITUDE,Constants.API_KEY)
                 }
             }
 
