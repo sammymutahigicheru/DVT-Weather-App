@@ -65,3 +65,8 @@ When mocking webserver response MockWebserver times out for some reason i.e sock
 
 I added some screenshots in the `screenshots` folder, in the root directory of the project.
 
+// https://github.com/sammymutahigicheru/DVT-Weather-App/blob/development/screenshots/home%20screen.jpg?raw=true
+
+Current Weather | Favourites | Maps
+--- | --- | ---
+<img src="https://github.com/sammymutahigicheru/DVT-Weather-App/blob/main/screenshots/current_weather.jpg" width="280"/> | <img src="https://github.com/sammymutahigicheru/DVT-Weather-App/blob/main/screenshots/favourites.jpg" width="280"/> | <img src="https://github.com/sammymutahigicheru/DVT-Weather-App/blob/main/screenshots/maps.jpg" width="280"/>
