@@ -15,10 +15,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DVTWeatherApp">
+
         <activity
             android:name=".ui.favourites.main.FavouriteActivity"
             android:parentActivityName=".ui.weather.main.MainActivity"
-            android:exported="false">
+            android:exported="true">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.weather.main.MainActivity" />
@@ -32,6 +33,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAP_KEY}" />
     </application>
+
 
 </manifest>

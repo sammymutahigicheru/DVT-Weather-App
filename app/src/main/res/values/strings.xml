@@ -2,4 +2,11 @@
     <string name="app_name">DVTWeather App</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="loading_weather_forecast">fetching weather forecast info...</string>
+    <string name="loading_current_weather">fetching current weather info...</string>
+    <string name="save_success_message">Current weather saved as favourite successfully.</string>
+    <string name="location_not_enabled">Location not enabled</string>
+    <string name="enable_location">Enable location to continue</string>
+    <string name="enable">ENABLE</string>
+    <string name="cancel">CANCEL</string>
 </resources>

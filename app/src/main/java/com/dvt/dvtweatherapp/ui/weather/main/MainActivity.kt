@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.Address
+import android.location.Geocoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -19,6 +20,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.palette.graphics.Palette
 import com.dvt.core.extensions.navigate
+import com.dvt.core.extensions.setImageTint
+import com.dvt.core.extensions.showSnackbar
 import com.dvt.core.helpers.isOnline
 import com.dvt.dvtweatherapp.BuildConfig
 import com.dvt.dvtweatherapp.R
@@ -26,14 +29,16 @@ import com.dvt.dvtweatherapp.data.Forecast
 import com.dvt.dvtweatherapp.data.Weather
 import com.dvt.dvtweatherapp.databinding.ActivityMainBinding
 import com.dvt.dvtweatherapp.ui.favourites.main.FavouriteActivity
+import com.dvt.dvtweatherapp.ui.weather.adapter.WeeklyForecastAdapter
+import com.dvt.dvtweatherapp.ui.weather.viewmodel.WeatherViewModel
+import com.dvt.dvtweatherapp.utils.BackgroundControllers
 import com.dvt.dvtweatherapp.utils.Constants
 import com.dvt.dvtweatherapp.utils.ResponseState
 import com.dvt.dvtweatherapp.utils.extensions.isLocationEnabled
 import com.dvt.dvtweatherapp.utils.extensions.isLocationPermissionEnabled
-import com.dvt.dvtweatherapp.utils.mappers.toCurrentWeather
+import com.dvt.dvtweatherapp.utils.mappers.toFavourites
 import com.dvt.dvtweatherapp.utils.mappers.toForecast
 import com.dvt.dvtweatherapp.utils.mappers.toWeather
-import com.dvt.dvtweatherapp.ui.weather.viewmodel.WeatherViewModel
 import com.dvt.network.models.CurrentWeatherResponse
 import com.dvt.network.models.OneShotForeCastResponse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -42,14 +47,9 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import kotlin.system.exitProcess
-import java.util.Locale
-
-import android.location.Geocoder
-import com.dvt.core.extensions.setImageTint
-import com.dvt.core.extensions.showSuccessSnackbar
-import com.dvt.dvtweatherapp.utils.mappers.toFavourites
 import java.io.IOException
+import java.util.*
+import kotlin.system.exitProcess
 
 
 class MainActivity : AppCompatActivity() {
@@ -78,14 +78,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun initListeners(currentWeather: Weather) {
         val description = currentWeather.description
-        when{
-            description.contains("rain",true) ->{
+        when {
+            description.contains(BackgroundControllers.RAINY, true) -> {
                 binding.favoritesFloatingActionButton.setImageTint(R.color.rainy)
             }
-            description.contains("sun",true)->{
+            description.contains(BackgroundControllers.SUNNY, true) -> {
                 binding.favoritesFloatingActionButton.setImageTint(R.color.sunny)
             }
-            description.contains("cloud",true) ->{
+            description.contains(BackgroundControllers.CLOUDY, true) -> {
                 binding.favoritesFloatingActionButton.setImageTint(R.color.cloudy)
             }
         }
@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.weatherForecastState.collect { state ->
                 when (state) {
                     is ResponseState.Loading -> {
-                        progress.setMessage("fetching weather forecast info...")
+                        progress.setMessage(getString(R.string.loading_weather_forecast))
                         progress.show()
                     }
                     is ResponseState.Result<*> -> {
@@ -132,14 +132,15 @@ class MainActivity : AppCompatActivity() {
             viewModel.currentWeatherState.collect { state ->
                 when (state) {
                     is ResponseState.Loading -> {
-                        progress.setMessage("fetching current weather info...")
+                        progress.setMessage(getString(R.string.loading_current_weather))
                         progress.show()
                     }
                     is ResponseState.Result<*> -> {
                         progress.dismiss()
                         val currentWeather: CurrentWeatherResponse =
                             state.data as CurrentWeatherResponse
-                        val locationName = getLocationName(currentWeather.coord.lat,currentWeather.coord.lon)
+                        val locationName =
+                            getLocationName(currentWeather.coord.lat, currentWeather.coord.lon)
                         currentWeather.locationName = locationName
                         setUpView(currentWeather.toWeather())
                     }
@@ -177,29 +178,29 @@ class MainActivity : AppCompatActivity() {
                 viewModel.saveCurrentWeatherAsFavorite(currentWeather.toFavourites())
                     .invokeOnCompletion {
                         this@MainActivity.runOnUiThread {
-                            val message = "Current weather saved as favourite successfully."
-                            binding.root.showSuccessSnackbar(message)
+                            val message = getString(R.string.save_success_message)
+                            binding.root.showSnackbar(message)
                         }
                     }
             }
         }
     }
 
-    private fun getLocationName(lat: Double, lon: Double):String{
+    private fun getLocationName(lat: Double, lon: Double): String {
         val geocoder = Geocoder(this@MainActivity, Locale.getDefault())
         try {
             val addresses: List<Address> = geocoder.getFromLocation(lat, lon, 1)
             val address: Address = addresses[0]
-            Timber.e("City Name: ${address.adminArea }")
+            Timber.e("City Name: ${address.adminArea}")
             return address.adminArea
-        }catch (e:Throwable){
+        } catch (e: Throwable) {
             throw IOException(e)
         }
     }
 
     private fun updateBackground(currentWeather: Weather) {
         when {
-            currentWeather.description.contains("rain", true) -> {
+            currentWeather.description.contains(BackgroundControllers.RAINY, true) -> {
                 binding.apply {
                     rootLayout.setBackgroundColor(resources.getColor(R.color.rainy))
                     currentWeatherLayout.setBackgroundResource(R.drawable.forest_rainy)
@@ -207,7 +208,7 @@ class MainActivity : AppCompatActivity() {
                 val bitMap: Bitmap = getBitmapResource(R.drawable.forest_rainy)
                 updateStatusBarColor(bitMap)
             }
-            currentWeather.description.contains("sun", true) -> {
+            currentWeather.description.contains(BackgroundControllers.SUNNY, true) -> {
                 binding.apply {
                     rootLayout.setBackgroundColor(resources.getColor(R.color.sunny))
                     currentWeatherLayout.setBackgroundResource(R.drawable.forest_sunny)
@@ -215,7 +216,7 @@ class MainActivity : AppCompatActivity() {
                 val bitMap: Bitmap = getBitmapResource(R.drawable.forest_sunny)
                 updateStatusBarColor(bitMap)
             }
-            currentWeather.description.contains("cloud", true) -> {
+            currentWeather.description.contains(BackgroundControllers.CLOUDY, true) -> {
                 binding.apply {
                     rootLayout.setBackgroundColor(resources.getColor(R.color.cloudy))
                     currentWeatherLayout.setBackgroundResource(R.drawable.forest_cloudy)
@@ -255,7 +256,9 @@ class MainActivity : AppCompatActivity() {
                     fetchWeatherForecast()
 
                 } else {
-                    //the user is offline
+                    //let the user know the app is offline
+                    binding.root.showSnackbar("Offline Mode")
+
                     fetchOfflineCurrentWeather()
                     fetchOfflineWeatherForecast()
                 }
@@ -285,8 +288,8 @@ class MainActivity : AppCompatActivity() {
             if (isLocationEnabled()) {
                 fetchCurrentLocation()
             } else {
-                Timber.e("Location not enabled")
-                askForLocation()
+                Timber.e(getString(R.string.location_not_enabled))
+                enableLocation()
             }
         } else {
             Timber.e("Location Permission Not enabled")
@@ -327,11 +330,10 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun askForLocation() {
-
+    private fun enableLocation() {
         MaterialAlertDialogBuilder(this).apply {
-            setMessage("Enable location to continue")
-            setPositiveButton("ENABLE") { dialog, _ ->
+            setMessage(getString(R.string.enable_location))
+            setPositiveButton(getString(R.string.enable)) { dialog, _ ->
                 val packageName = BuildConfig.APPLICATION_ID
                 dialog.dismiss()
                 Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
@@ -339,7 +341,7 @@ class MainActivity : AppCompatActivity() {
                     startActivity(this)
                 }
             }
-            setNegativeButton("CANCEL") { dialog, _ ->
+            setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.dismiss()
                 exitProcess(0)
             }
@@ -348,10 +350,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateStatusBarColor(bitMap: Bitmap) {
-
         Palette.Builder(bitMap)
             .generate { result ->
-
                 result?.let {
                     val dominantSwatch = it.dominantSwatch
 

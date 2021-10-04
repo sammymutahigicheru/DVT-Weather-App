@@ -5,6 +5,7 @@ import com.dvt.data.database.entities.Favourites
 import com.dvt.network.models.CurrentWeatherResponse
 
 fun CurrentWeatherResponse.toCurrentWeather():CurrentWeather{
+    val description = if (this.weather.isNotEmpty()) this.weather[0].description else ""
     return CurrentWeather(
         this.id,
         this.coord.lat,
@@ -13,7 +14,7 @@ fun CurrentWeatherResponse.toCurrentWeather():CurrentWeather{
         this.main.temp,
         this.main.tempMax,
         this.main.tempMin,
-        this.weather[0].description,
+        description,
         this.locationName
     )
 }
