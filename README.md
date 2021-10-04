@@ -60,3 +60,8 @@ When mocking webserver response MockWebserver times out for some reason i.e sock
 
 * CI/CD
     * Github Actions
+
+### Screenshots
+
+I added some screenshots in the `screenshots` folder, in the root directory of the project.
+
