@@ -16,9 +16,9 @@ fun Context.bitmapFromVector(vectorResId: Int): BitmapDescriptor {
     val bitmapDrawable = ContextCompat.getDrawable(this, vectorResId) as BitmapDrawable
 
 
-    val color = Color.WHITE
+    val color = Color.BLACK
 
-    val smallMarker = Bitmap.createScaledBitmap(bitmapDrawable.bitmap, 200, 200, false)
+    val smallMarker = Bitmap.createScaledBitmap(bitmapDrawable.bitmap, 100, 100, false)
 
     val paint = Paint()
     val canvas = Canvas(smallMarker)

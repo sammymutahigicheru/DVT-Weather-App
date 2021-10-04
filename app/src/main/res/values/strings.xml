@@ -6,7 +6,7 @@
     <string name="loading_current_weather">fetching current weather info...</string>
     <string name="save_success_message">Current weather saved as favourite successfully.</string>
     <string name="location_not_enabled">Location not enabled</string>
-    <string name="enable_location">Enable location to continue</string>
+    <string name="enable_location">Enable GPS Location to continue</string>
     <string name="enable">ENABLE</string>
     <string name="cancel">CANCEL</string>
 </resources>

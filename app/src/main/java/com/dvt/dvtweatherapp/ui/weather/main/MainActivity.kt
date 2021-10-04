@@ -21,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.palette.graphics.Palette
 import com.dvt.core.extensions.navigate
 import com.dvt.core.extensions.setImageTint
+import com.dvt.core.extensions.showErrorDialog
 import com.dvt.core.extensions.showSnackbar
 import com.dvt.core.helpers.isOnline
 import com.dvt.dvtweatherapp.BuildConfig
@@ -65,7 +66,6 @@ class MainActivity : AppCompatActivity() {
         isOnline(this)
     }
 
-    @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -73,6 +73,11 @@ class MainActivity : AppCompatActivity() {
         progressDialog = MaterialAlertDialogBuilder(this).apply {
             setCancelable(false)
         }
+    }
+
+    @ExperimentalCoroutinesApi
+    override fun onStart() {
+        super.onStart()
         checkForLocationPermission()
     }
 
@@ -289,7 +294,9 @@ class MainActivity : AppCompatActivity() {
                 fetchCurrentLocation()
             } else {
                 Timber.e(getString(R.string.location_not_enabled))
-                enableLocation()
+                showErrorDialog("GPS Location Not Enabled","Enable GPS Location To Continue",shouldExit = true ){
+                    checkForLocationPermission()
+                }
             }
         } else {
             Timber.e("Location Permission Not enabled")
@@ -308,6 +315,7 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    @SuppressLint("MissingSuperCall")
     @ExperimentalCoroutinesApi
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -322,30 +330,11 @@ class MainActivity : AppCompatActivity() {
                             Manifest.permission.ACCESS_FINE_LOCATION
                         ) == PackageManager.PERMISSION_GRANTED
                     ) {
-                        fetchCurrentLocation()
+                        //check permissions again incase the user has not enabled gps it will prompt the user to turn on gps
+                        checkForLocationPermission()
                     }
                 }
             }
-        }
-    }
-
-
-    private fun enableLocation() {
-        MaterialAlertDialogBuilder(this).apply {
-            setMessage(getString(R.string.enable_location))
-            setPositiveButton(getString(R.string.enable)) { dialog, _ ->
-                val packageName = BuildConfig.APPLICATION_ID
-                dialog.dismiss()
-                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.parse("package:$packageName")
-                    startActivity(this)
-                }
-            }
-            setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
-                dialog.dismiss()
-                exitProcess(0)
-            }
-            show()
         }
     }
 
